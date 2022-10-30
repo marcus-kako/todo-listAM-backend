@@ -10,10 +10,15 @@ class UserController {
 
   public create = async (req: Request, res: Response) => {
     const createdUser = await this.userService.create(req.body);
-    return res.status(200).json(createdUser);
+    return res.status(201).json(createdUser);
   };
 
-  public getAll = async (req: Request, res: Response) => {
+  public login = async (req: Request, res: Response) => {
+    const login = await this.userService.login(req.body);
+    return res.status(200).json(login);
+  }
+
+  public getAll = async (_req: Request, res: Response) => {
     const allUsers = await this.userService.getAll();
     return res.status(200).json(allUsers);
   };

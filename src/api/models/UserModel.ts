@@ -2,10 +2,10 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from "../../db/config";
 
 export class User extends Model {
-  public readonly _id!: number;
-  public _name!: string;
-  public _email!: string;
-  public _password!: string;
+  public readonly id!: number;
+  public name!: string;
+  public email!: string;
+  public password!: string;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }

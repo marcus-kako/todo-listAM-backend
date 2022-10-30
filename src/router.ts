@@ -8,6 +8,9 @@ const router: Router = Router();
 const userController = new UserController();
 const taskController = new TaskController();
 
+// Login
+router.post("/user/login", userController.login);
+
 // User
 router.post("/user", userController.create);
 router.get("/users", userController.getAll);
