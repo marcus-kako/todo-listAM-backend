@@ -2,7 +2,7 @@ import { Router } from "express";
 import sequelize from "./db/config";
 import UserController from "./api/controllers/UserController";
 import TaskController from "./api/controllers/TaskController";
-import TokenValidation  from "./middleware/TokenValidation";
+import { loginValidation, userValidation, tokenValidation } from "./middleware";
 
 const router: Router = Router();
 
@@ -10,14 +10,11 @@ const router: Router = Router();
 const userController = new UserController();
 const taskController = new TaskController();
 
-// Middlewares
-const tokenValidation = new TokenValidation();
-
 // Login
-router.post("/user/login", userController.login);
 
 // User
-router.post("/user", userController.create);
+router.post("/user", userValidation, userController.create);
+router.post("/user/login", loginValidation, userController.login);
 router.get("/users", userController.getAll);
 router.get("/user/:id", userController.getById);
 router.delete("/user/:id", userController.delete);

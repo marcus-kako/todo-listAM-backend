@@ -2,7 +2,7 @@ import { Request, Response } from 'express';
 import TaskService from "../services/TaskService";
 
 class TaskController {
-    public taskService: TaskService;
+    private taskService: TaskService;
 
   constructor() {
     this.taskService = new TaskService();

@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import UserService from "../services/UserService";
 
 class UserController {
-  public userService: UserService;
+  private userService: UserService;
 
   constructor() {
     this.userService = new UserService();
