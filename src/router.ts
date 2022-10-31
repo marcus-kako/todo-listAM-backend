@@ -2,11 +2,19 @@ import { Router } from "express";
 import sequelize from "./db/config";
 import UserController from "./api/controllers/UserController";
 import TaskController from "./api/controllers/TaskController";
+import TokenValidation  from "./middleware/TokenValidation";
 
 const router: Router = Router();
 
+ // Controllers
 const userController = new UserController();
 const taskController = new TaskController();
+
+// Middlewares
+const tokenValidation = new TokenValidation();
+
+// Login
+router.post("/user/login", userController.login);
 
 // User
 router.post("/user", userController.create);
@@ -15,14 +23,13 @@ router.get("/user/:id", userController.getById);
 router.delete("/user/:id", userController.delete);
 router.put("/user/:id", userController.update);
 
-
 // Task
-router.post("/task", taskController.create);
-router.get("/tasks", taskController.getAll);
-router.get("/task/:id", taskController.getById);
-router.get("/task/user/:id", taskController.getByUserId);
-router.delete("/task/:id", taskController.delete);
-router.put("/task/:id", taskController.update);
+router.post("/task", tokenValidation.validation, taskController.create);
+router.get("/tasks", tokenValidation.validation, taskController.getAll);
+router.get("/task/:id", tokenValidation.validation, taskController.getById);
+router.get("/task/user/:id", tokenValidation.validation, taskController.getByUserId);
+router.delete("/task/:id", tokenValidation.validation, taskController.delete);
+router.put("/task/:id", tokenValidation.validation, taskController.update);
 
 
 
