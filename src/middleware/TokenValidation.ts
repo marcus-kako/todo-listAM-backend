@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from "express";
-import { StatusCode } from "../utils/StatusCode.enum";
-import { TokenGenerate } from "../utils/TokenGenerate";
+import StatusCode from "../utils/StatusCode";
+import TokenGenerate from "../utils/TokenGenerate";
 
 class TokenValidation {
   public async validation(req: Request, res: Response, next: NextFunction) {

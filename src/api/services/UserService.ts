@@ -1,4 +1,4 @@
-import { TokenGenerate } from "../../utils/TokenGenerate";
+import TokenGenerate from "../../utils/TokenGenerate";
 import ILoginDto from "../interfaces/ILogin";
 import { IUser, IUserDto } from "../interfaces/IUser";
 import User from "../models/UserModel";
