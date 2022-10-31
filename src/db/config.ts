@@ -3,6 +3,7 @@ import { Sequelize } from "sequelize";
 const sequelize = new Sequelize({
   dialect: "sqlite",
   storage: "./database.sqlite",
+  // logging: false,  // Descomentar caso queira deixar de ver as querys no console.
 });
 
 try {

@@ -1,13 +1,13 @@
 import { TokenGenerate } from "../../utils/TokenGenerate";
 import ILoginDto from "../interfaces/ILogin";
-import IUser from "../interfaces/IUser";
+import { IUser, IUserDto } from "../interfaces/IUser";
 import User from "../models/UserModel";
 
 class UserService {
 
   constructor() { }
 
-  public async create(user: IUser): Promise<IUser | null> {
+  public async create(user: IUserDto): Promise<IUser | null> {
     const { name, email, password } = user;
     const { id } = await User.create({ name, email, password });
 
@@ -50,7 +50,7 @@ class UserService {
     await user?.destroy()
   }
 
-  public async update(id: number, user: User): Promise<User | null> {
+  public async update(id: number, user: IUserDto): Promise<User | null> {
     const foundUser = await User.findByPk(id);
     foundUser?.update({ ...user });
     foundUser?.save()
