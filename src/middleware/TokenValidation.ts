@@ -6,7 +6,7 @@ class TokenValidation {
   public async validation(req: Request, res: Response, next: NextFunction) {
     const token = req.headers.authorization;
     if (!token) {
-      return res.status(StatusCode.Unauthorized).json({ message: 'Token not found' });
+      return res.status(StatusCode.Forbidden).json({ message: 'Token not found' });
     }
 
     try {
@@ -14,7 +14,7 @@ class TokenValidation {
       req.body.data = data;
       next();
     } catch (error) {
-      return res.status(StatusCode.Unauthorized).json({ message: 'Expired or invalid token' });
+      return res.status(StatusCode.Forbidden).json({ message: 'Expired or invalid token' });
     }
   }
 }

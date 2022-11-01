@@ -32,7 +32,7 @@ router.put("/task/:id", tokenValidation.validation, taskController.update);
 
 
 // Drop All Tables
-router.get("/sync_all_tables", async (req, res) => {
+router.get("/sync_all_tables", async (_req, res) => {
   try {
     sequelize.sync({ force: true });
     res

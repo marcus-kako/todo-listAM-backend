@@ -4,6 +4,8 @@ import { CustomError } from "./CustomError";
 import { InternalServerError } from "./InternalServerError";
 import { NotFoundError } from "./NotFoundError";
 import { UnauthorizedError } from "./UnauthorizedError";
+import { UnprocessableEntity } from "./UnprocessableEntity";
+
 
 export {
  BadRequestError,
@@ -11,6 +13,7 @@ export {
  InternalServerError,
  NotFoundError,
  UnauthorizedError,
+ UnprocessableEntity,
 };
 
 export default CustomError;
