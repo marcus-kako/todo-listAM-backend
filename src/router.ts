@@ -2,7 +2,7 @@ import { Router } from "express";
 import sequelize from "./db/config";
 import UserController from "./api/controllers/UserController";
 import TaskController from "./api/controllers/TaskController";
-import { loginValidation, userValidation, tokenValidation } from "./middleware";
+import { loginValidation, userValidation, tokenValidation, taskValidation } from "./middleware";
 
 const router: Router = Router();
 
@@ -21,7 +21,7 @@ router.delete("/user/:id", userController.delete);
 router.put("/user/:id", userController.update);
 
 // Task
-router.post("/task", tokenValidation.validation, taskController.create);
+router.post("/task", tokenValidation.validation, taskValidation, taskController.create);
 router.get("/tasks", tokenValidation.validation, taskController.getAll);
 router.get("/task/:id", tokenValidation.validation, taskController.getById);
 router.get("/task/user/:id", tokenValidation.validation, taskController.getByUserId);

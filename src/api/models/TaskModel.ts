@@ -2,15 +2,15 @@ import { Model, DataTypes } from "sequelize";
 import sequelize from "../../db/config";
 
 export class Task extends Model {
-  public readonly _id!: number;
-  public _title!: string;
-  public _description!: string;
-  public _closed_at!: Date | null;
-  public _todo_until!: Date;
-  public _remember!: boolean;
-  public _done_on_time!: boolean;
-  public _done!: boolean;
-  public _user_id!: number;
+  public readonly id!: number;
+  public title!: string;
+  public description!: string;
+  public closed_at!: Date | null;
+  public todo_until!: Date;
+  public remember!: boolean;
+  public done_on_time!: boolean;
+  public done!: boolean;
+  public user_id!: number;
   public readonly createdAt!: Date;
   public readonly updatedAt!: Date;
 }
@@ -38,8 +38,9 @@ Task.init(
       allowNull: false,
     },
 
-    done_on_time: {
+    doneOnTime: {
       type: DataTypes.BOOLEAN,
+      field: 'done_on_time',
     },
 
     done: {
@@ -47,18 +48,21 @@ Task.init(
       allowNull: false,
     },
 
-    closed_at: {
+    closedAt: {
       type: DataTypes.DATE,
+      field: 'closed_at',
     },
 
-    todo_until: {
+    todoUntil: {
       type: DataTypes.DATE,
       allowNull: false,
+      field: 'todo_until',
     },
 
-    user_id: {
+    userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
+      field: 'user_id',
     },
   },
   {
