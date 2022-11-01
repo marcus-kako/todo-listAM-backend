@@ -11,7 +11,7 @@ const loginShema = Joi.object({
 const loginValidation = (req: Request, res: Response, next: NextFunction) => {
   const { error } = loginShema.validate(req.body);
   if (error) {
-    return res.status(StatusCode.BadRequest).json({ message: 'All fields must be filled in correctly' })
+    return res.status(StatusCode.BadRequest).json({ message: error.details[0].message })
   }
   next();
 }
