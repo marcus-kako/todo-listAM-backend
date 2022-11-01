@@ -1,7 +1,7 @@
 import * as fs from 'fs/promises';
 import * as jwt from 'jsonwebtoken';
 
-export class TokenGenerate {
+class TokenGenerate {
   private jwtConfig: jwt.SignOptions = {
     expiresIn: '7d',
     algorithm: 'HS256',
@@ -16,3 +16,5 @@ export class TokenGenerate {
     return jwt.verify(token, await fs.readFile('jwt.secret.key', 'utf-8'));
   }
 }
+
+export default TokenGenerate;

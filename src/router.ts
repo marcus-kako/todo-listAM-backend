@@ -2,7 +2,7 @@ import { Router } from "express";
 import sequelize from "./db/config";
 import UserController from "./api/controllers/UserController";
 import TaskController from "./api/controllers/TaskController";
-import TokenValidation  from "./middleware/TokenValidation";
+import { loginValidation, userValidation, tokenValidation, taskValidation } from "./middleware";
 
 const router: Router = Router();
 
@@ -10,21 +10,18 @@ const router: Router = Router();
 const userController = new UserController();
 const taskController = new TaskController();
 
-// Middlewares
-const tokenValidation = new TokenValidation();
-
 // Login
-router.post("/user/login", userController.login);
 
 // User
-router.post("/user", userController.create);
+router.post("/user", userValidation, userController.create);
+router.post("/user/login", loginValidation, userController.login);
 router.get("/users", userController.getAll);
 router.get("/user/:id", userController.getById);
 router.delete("/user/:id", userController.delete);
 router.put("/user/:id", userController.update);
 
 // Task
-router.post("/task", tokenValidation.validation, taskController.create);
+router.post("/task", tokenValidation.validation, taskValidation, taskController.create);
 router.get("/tasks", tokenValidation.validation, taskController.getAll);
 router.get("/task/:id", tokenValidation.validation, taskController.getById);
 router.get("/task/user/:id", tokenValidation.validation, taskController.getByUserId);
@@ -35,7 +32,7 @@ router.put("/task/:id", tokenValidation.validation, taskController.update);
 
 
 // Drop All Tables
-router.get("/sync_all_tables", async (req, res) => {
+router.get("/sync_all_tables", async (_req, res) => {
   try {
     sequelize.sync({ force: true });
     res

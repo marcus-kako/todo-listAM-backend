@@ -1,4 +1,5 @@
-import { TokenGenerate } from "../../utils/TokenGenerate";
+import { BadRequestError, InternalServerError, NotFoundError, UnprocessableEntity } from "../../utils/CustomError";
+import TokenGenerate from "../../utils/TokenGenerate";
 import ILoginDto from "../interfaces/ILogin";
 import { IUser, IUserDto } from "../interfaces/IUser";
 import User from "../models/UserModel";
@@ -9,6 +10,10 @@ class UserService {
 
   public async create(user: IUserDto): Promise<IUser | null> {
     const { name, email, password } = user;
+    const haveRegisteredEmail = await User.findOne({ where: { email } });
+    if (haveRegisteredEmail) {
+      throw new UnprocessableEntity('Email already registered');
+    }
     const { id } = await User.create({ name, email, password });
 
     const tokenGenerate = new TokenGenerate();
@@ -24,10 +29,10 @@ class UserService {
         attributes: { include: ['id', 'name', 'email'] }
       });
     if (!haveRegisteredEmail) {
-      throw new Error("Email não cadastrado");
+      throw new NotFoundError('Email not registered');
     }
     if (password !== haveRegisteredEmail.password) {
-      throw new Error("Email ou senha incorreta");
+      throw new BadRequestError("Incorrect email or password");
     }
 
     const { id, name } = haveRegisteredEmail;
@@ -37,27 +42,49 @@ class UserService {
 
   public async getAll(): Promise<User[] | null> {
     const allUsers = await User.findAll({ attributes: { exclude: ['createdAt', 'updatedAt', 'password'] } });
+    if (!allUsers) {
+      throw new InternalServerError("Something unexpected happened, please try again later");
+    }
     return allUsers;
   }
 
   public async getById(id: number): Promise<User | null> {
     const user = await User.findByPk(id, { attributes: { exclude: ['createdAt', 'updatedAt', 'password'] } });
+
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+
     return user;
   }
 
   public async delete(id: number): Promise<void> {
     const user = await User.findByPk(id);
-    await user?.destroy()
+
+    if (!user) {
+      throw new NotFoundError("User not found");
+    }
+    await user.destroy()
   }
 
   public async update(id: number, user: IUserDto): Promise<User | null> {
     const foundUser = await User.findByPk(id);
-    foundUser?.update({ ...user });
-    foundUser?.save()
+    if (!foundUser) {
+      throw new NotFoundError("User not found");
+    }
+
+    foundUser.update({ ...user });
+    foundUser.save();
+
     const foundUserUpdated = await User.findByPk(
       id,
-      { attributes: { exclude: ['createdAt', 'updatedAt', 'password'] } }
+      { attributes: { exclude: ['password'] } }
     );
+    
+    if (!foundUserUpdated) {
+      throw new BadRequestError("All fields must be filled in correctly");
+    }
+
     return foundUserUpdated;
   }
 }
