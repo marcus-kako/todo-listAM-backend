@@ -35,8 +35,8 @@ class UserService {
     if (!haveRegisteredEmail) {
       throw new NotFoundError('Email not registered');
     }
-    
-    if (await bcrypt.compare(password, haveRegisteredEmail.password) === false) {
+
+    if (!(await bcrypt.compare(password, haveRegisteredEmail.password))) {
       throw new BadRequestError("Incorrect email or password");
     }
 
