@@ -3,17 +3,21 @@ import TokenGenerate from "../../utils/TokenGenerate";
 import ILoginDto from "../interfaces/ILogin";
 import { IUser, IUserDto } from "../interfaces/IUser";
 import User from "../models/UserModel";
+import bcrypt from 'bcrypt'
+
 
 class UserService {
 
   constructor() { }
 
   public async create(user: IUserDto): Promise<IUser | null> {
-    const { name, email, password } = user;
+    const { name, email, password: pass } = user;
     const haveRegisteredEmail = await User.findOne({ where: { email } });
     if (haveRegisteredEmail) {
       throw new UnprocessableEntity('Email already registered');
     }
+    const saltRounds: number = 10;
+    const password: string = await bcrypt.hash(pass, saltRounds);
     const { id } = await User.create({ name, email, password });
 
     const tokenGenerate = new TokenGenerate();
@@ -31,7 +35,8 @@ class UserService {
     if (!haveRegisteredEmail) {
       throw new NotFoundError('Email not registered');
     }
-    if (password !== haveRegisteredEmail.password) {
+
+    if (!(await bcrypt.compare(password, haveRegisteredEmail.password))) {
       throw new BadRequestError("Incorrect email or password");
     }
 
