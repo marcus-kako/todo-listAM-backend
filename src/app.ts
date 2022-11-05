@@ -1,3 +1,4 @@
+import cors from 'cors';
 import express from 'express';
 import router from "./router";
 
@@ -11,6 +12,7 @@ export default class Application {
   }
 
   private middleware() {
+    this.server.use(cors());
     this.server.use(express.json());
   }
 
