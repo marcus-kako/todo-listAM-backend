@@ -78,6 +78,11 @@ class UserService {
       throw new NotFoundError("User not found");
     }
 
+    if (user.password !== undefined) {
+      const saltRounds: number = 10;
+      const password: string = await bcrypt.hash(user.password, saltRounds);
+      user.password = password;
+    }
     foundUser.update({ ...user });
     foundUser.save();
 
